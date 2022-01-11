@@ -90,8 +90,6 @@ const deleteJSON = function (url) {
     xhr.responseType = 'json';
 
     xhr.onload = function () {
-      let status = xhr.status;
-
       resolve(xhr.response);
     };
 
@@ -104,6 +102,10 @@ const deleteJSON = function (url) {
 };
 
 class TodoList {
+  constructor(elem) {
+    this.elem = elem;
+  }
+
   async getDataFromDB() {
     try {
       let data = await getJSON(requestURL);
@@ -180,7 +182,7 @@ class TodoList {
           }">${el.task}
           <button class="set-status">Change status</button><button class="delete-task">Delete</button></li>`;
         }
-        list.innerHTML = res;
+        this.elem.innerHTML = res;
       })
       .catch((error) => console.error(error));
   }

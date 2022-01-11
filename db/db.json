@@ -1,9 +1,9 @@
 {
   "todos": [
     {
-      "id": 1,
       "task": "buy milk",
-      "complited": false
+      "complited": false,
+      "id": 1
     },
     {
       "task": "buy bread",
@@ -11,19 +11,9 @@
       "id": 2
     },
     {
-      "task": "buy sugar",
+      "task": "buy beer",
       "complited": false,
       "id": 3
-    },
-    {
-      "task": "фйкетцке",
-      "complited": false,
-      "id": 4
-    },
-    {
-      "task": "45п45п",
-      "complited": true,
-      "id": 6
     }
   ]
 }
