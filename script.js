@@ -104,6 +104,16 @@ const deleteJSON = function (url) {
 class TodoList {
   constructor(elem) {
     this.elem = elem;
+    this.elem.addEventListener('click', (event) => {
+      let target = event.target;
+      let todoId = target.closest('li').dataset.id;
+
+      if (target.className.includes('set-status')) {
+        newTodo.changeTodoStatus(todoId);
+      } else if (target.className.includes('delete-task')) {
+        newTodo.removeTodo(todoId);
+      }
+    });
   }
 
   async getDataFromDB() {
@@ -122,16 +132,16 @@ class TodoList {
           task: input.value,
           complited: false,
         });
-        this.render(); //....................
+        this.render();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   }
 
   async changeTodoStatus(id) {
     try {
-      let data = await this.getDataFromDB();
+      let data = await getJSON(requestURL);
 
       for (let item of data) {
         if (item.id == id) {
@@ -157,7 +167,7 @@ class TodoList {
 
   async removeTodo(id) {
     try {
-      let data = await this.getDataFromDB();
+      let data = await getJSON(requestURL);
 
       for (let item of data) {
         if (item.id == id) {
@@ -166,37 +176,17 @@ class TodoList {
         this.render();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
-  // render() {
-  //   let res = '';
-
-  //   this.getDataFromDB()
-  //     .then((data) => {
-  //       for (let el of data) {
-  //         if (!el) {
-  //           return;
-  //         }
-  //         res += `<li class="list-item must-done ${el.complited ? 'done' : 'must-done'}" data-id="${
-  //           el.id
-  //         }">${el.task}
-  //         <button class="set-status">Change status</button><button class="delete-task">Delete</button></li>`;
-  //       }
-  //       this.elem.innerHTML = res;
-  //     })
-  //     .catch((error) => console.error(error));
-  // }
-
   async render() {
     let res = '';
-    let data = await this.getDataFromDB();
-    console.log(data);
 
     try {
+      let data = await this.getDataFromDB();
+
       for (let el of data) {
-        console.log(el);
         if (!el) {
           return;
         }
@@ -212,21 +202,10 @@ class TodoList {
   }
 }
 
-let todo1 = new TodoList(list);
-todo1.render();
+let newTodo = new TodoList(list);
+newTodo.render();
 
-createButton.addEventListener('click', () => {
-  todo1.addTodo();
+createButton.addEventListener('click', function () {
+  newTodo.addTodo();
   input.value = '';
-});
-
-list.addEventListener('click', (event) => {
-  let target = event.target;
-  let todoId = target.closest('li').dataset.id;
-
-  if (target.className.includes('set-status')) {
-    todo1.changeTodoStatus(todoId);
-  } else if (target.className.includes('delete-task')) {
-    todo1.removeTodo(todoId);
-  }
 });
